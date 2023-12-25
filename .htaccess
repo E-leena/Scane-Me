@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+
+    <Files .env *.json>
+    order allow,deny
+    Deny from all
+    </Files>
+</IfModule>

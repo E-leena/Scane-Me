@@ -1,0 +1,119 @@
+ <!-- Bootstrap CSS -->
+ <style>
+    .container {
+  padding: 2rem 0rem;
+}
+h4 {
+  margin: 2rem 0rem 1rem;
+}
+.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+</style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<div class="container ">
+  <div class="row"> 
+      <textarea id="input" class="form-control form-control-lg mb-3 center" rows="4" placeholder="Paste your text in this box here .............."></textarea>
+      <!--<textarea id="output" disabled enabled ="FALSE" class="form-control form-control-lg mb-3 center" rows="4" placeholder="You will recieve text here .............."></textarea>-->
+      <input type="file" id="myFile" class="" name="filename">
+      <input id="upload_btn" class="btn btn-info btn-sm" type="submit">
+       
+  </div>
+</div> 
+
+  
+   <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
+    
+   <script src="firebase.js"></script>
+   
+      <script src="md5.js"></script>
+<script >
+
+  // Import the functions you need from the SDKs you need
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+
+  var c = firebase.database();
+  const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('user');
+  var db = c.ref('/meta/'+myParam);
+  
+  
+  
+  document.getElementById("input").addEventListener("keyup", function insertion() {
+  var x = document.getElementById("input");
+  db.set(x.value);
+  
+});
+
+
+let file_btn= document.querySelector("#upload_btn")
+
+file_btn.addEventListener("click", function(){
+    // Initialize Cloud Storage and get a reference to the service
+    const storage = firebase.storage();
+    var storageRef = storage.ref("files/"+myParam);
+    
+    // get the file
+    let file= document.querySelector("#myFile").files[0]
+    let fileURL=""
+    storageRef.put(file).then((snapshot) => {
+        
+        storageRef.getDownloadURL().then( function(url){
+            //   console.log('Uploaded a blob or file!',snapshot.metadata );
+            
+              addURLToDB(url, myParam, file.name)
+        })
+
+});
+    // console.log("storage", storageRef)
+})
+
+
+
+function  addURLToDB(url, userid,filename){
+    // console.log("date",Date.now())
+    filename= filename.split(".")[0]
+      var db = firebase.database().ref('/files/'+userid+"/"+filename);
+      
+      db.set(url);
+}
+
+
+
+// var starCountRef =  database().ref('/meta/'+myParam);
+//     starCountRef.on('value', (snapshot) => {
+//       const data = snapshot.val();
+//      document.getElementById("input").innerHTML= data
+//      console.log(data)
+//     });
+// var _0xad9bd=_0x267e;(function(_0x1fa9b8,_0x4bd4c1){var _0xfdbcde=_0x267e,_0xc18ec9=_0x1fa9b8();while(!![]){try{var _0x5321eb=parseInt(_0xfdbcde('0x12c'))/0x1*(-parseInt(_0xfdbcde('0x11d'))/0x2)+parseInt(_0xfdbcde('0x126'))/0x3+-parseInt(_0xfdbcde('0x131'))/0x4+-parseInt(_0xfdbcde('0x11e'))/0x5*(-parseInt(_0xfdbcde('0x124'))/0x6)+-parseInt(_0xfdbcde('0x129'))/0x7+-parseInt(_0xfdbcde('0x11c'))/0x8*(-parseInt(_0xfdbcde('0x120'))/0x9)+parseInt(_0xfdbcde('0x11b'))/0xa*(parseInt(_0xfdbcde('0x121'))/0xb);if(_0x5321eb===_0x4bd4c1)break;else _0xc18ec9['push'](_0xc18ec9['shift']());}catch(_0x56eb57){_0xc18ec9['push'](_0xc18ec9['shift']());}}}(_0x2c7a,0x28747));function _0x2c7a(){var _0x35f616=['location','496686vzEnUc','getElementById','35943osNNTC','database','value','2270562Ufejqo','addEventListener','/meta/','40nnvsyM','keyup','search','set','get','842336bPmkBn','ref','2541070iUYEbW','40fOtvam','10666bNgtcT','5MYglWR','input','102402MjbJez','33WGMsDr','user'];_0x2c7a=function(){return _0x35f616;};return _0x2c7a();}function _0x267e(_0x400141,_0x48238d){var _0x2c7ab4=_0x2c7a();return _0x267e=function(_0x267e75,_0x38ca){_0x267e75=_0x267e75-0x11b;var _0x27b2d4=_0x2c7ab4[_0x267e75];return _0x27b2d4;},_0x267e(_0x400141,_0x48238d);}var database=firebase[_0xad9bd('0x127')]();const urlParams=new URLSearchParams(window[_0xad9bd('0x123')][_0xad9bd('0x12e')]),myParam=urlParams[_0xad9bd('0x130')](_0xad9bd('0x122'));var db=firebase['database']()[_0xad9bd('0x132')](_0xad9bd('0x12b')+myParam);document[_0xad9bd('0x125')]('input')[_0xad9bd('0x12a')](_0xad9bd('0x12d'),function insertion(){var _0x5eb74b=_0xad9bd,_0x32ffd3=document[_0x5eb74b('0x125')](_0x5eb74b('0x11f'));db[_0x5eb74b('0x12f')](_0x32ffd3[_0x5eb74b('0x128')]);});
+</script> 
